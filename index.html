@@ -335,7 +335,8 @@ tbody tr:hover td{background:var(--surf2)}
       <button class="stab active" id="stab-sg"       onclick="switchStab('sg',this)"><i class="ti ti-chart-line"></i>比重</button>
       <button class="stab"        id="stab-quality"   onclick="switchStab('quality',this)"><i class="ti ti-droplets"></i>PH・黏滯・含砂</button>
       <button class="stab"        id="stab-concrete"  onclick="switchStab('concrete',this)"><i class="ti ti-chart-bar"></i>澆置量</button>
-      <button class="stab"        id="stab-conc-quality" onclick="switchStab('conc-quality',this)"><i class="ti ti-flask"></i>混凝土品質</button>
+      <button class="stab"        id="stab-fc280" onclick="switchStab('fc280',this)"><i class="ti ti-flask"></i>混凝土品質 fc'280</button>
+      <button class="stab"        id="stab-fc210" onclick="switchStab('fc210',this)"><i class="ti ti-flask"></i>混凝土品質 fc'210</button>
     </div>
 
     <!-- 比重 -->
@@ -385,22 +386,46 @@ tbody tr:hover td{background:var(--surf2)}
       <p class="scroll-hint"><i class="ti ti-hand-finger" style="font-size:13px"></i>左右滑動查看全部單元</p>
     </div>
 
-    <!-- 混凝土品質 -->
-    <div class="stab-pane" id="sp-conc-quality">
+    <!-- 混凝土品質 fc'280 -->
+    <div class="stab-pane" id="sp-fc280">
       <div class="chart-toolbar">
         <div class="chart-legend">
-          <span><span class="lg-dot" style="background:#1B4F8A"></span>溫度°C（10–32）</span>
-          <span><span class="lg-dot" style="background:#2E6B3A;border:1px dashed #2E6B3A"></span>氯離子×100（&lt;0.15）</span>
-          <span><span class="lg-dot" style="background:#7A3800"></span>坍度cm（20±2）</span>
+          <span><span class="lg-dot" style="background:#1B4F8A"></span>溫度°C 第1組</span>
+          <span><span class="lg-dot" style="background:#7FA8D9"></span>溫度°C 第2組</span>
+          <span><span class="lg-dot" style="background:#2E6B3A;border:1px dashed #2E6B3A"></span>氯離子×100 第1組</span>
+          <span><span class="lg-dot" style="background:#8FBF9A;border:1px dashed #8FBF9A"></span>氯離子×100 第2組</span>
+          <span><span class="lg-dot" style="background:#7A3800"></span>坍度cm 第1組</span>
+          <span><span class="lg-dot" style="background:#C99A6E"></span>坍度cm 第2組</span>
           <span class="over-note"><i class="ti ti-alert-triangle" style="font-size:13px"></i>紅字＝超標</span>
         </div>
         <div class="sort-toggle">
-          <button class="sort-btn active" id="conc-quality-sort-unit" onclick="setSort('conc-quality','unit')"><i class="ti ti-layout-grid"></i>依單元</button>
-          <button class="sort-btn"        id="conc-quality-sort-date" onclick="setSort('conc-quality','date')"><i class="ti ti-calendar"></i>依日期</button>
+          <button class="sort-btn active" id="fc280-sort-unit" onclick="setSort('fc280','unit')"><i class="ti ti-layout-grid"></i>依單元</button>
+          <button class="sort-btn"        id="fc280-sort-date" onclick="setSort('fc280','date')"><i class="ti ti-calendar"></i>依日期</button>
         </div>
       </div>
-      <div class="scroll-wrap"><div class="scroll-inner" id="si-conc-quality"><canvas id="chart-conc-quality"></canvas></div></div>
-      <p class="scroll-hint"><i class="ti ti-hand-finger" style="font-size:13px"></i>左右滑動查看全部單元</p>
+      <div class="scroll-wrap"><div class="scroll-inner" id="si-fc280"><canvas id="chart-fc280"></canvas></div></div>
+      <p class="scroll-hint"><i class="ti ti-hand-finger" style="font-size:13px"></i>左右滑動查看全部單元・淺色點為第2組試體</p>
+    </div>
+
+    <!-- 混凝土品質 fc'210 -->
+    <div class="stab-pane" id="sp-fc210">
+      <div class="chart-toolbar">
+        <div class="chart-legend">
+          <span><span class="lg-dot" style="background:#1B4F8A"></span>溫度°C 第1組</span>
+          <span><span class="lg-dot" style="background:#7FA8D9"></span>溫度°C 第2組</span>
+          <span><span class="lg-dot" style="background:#2E6B3A;border:1px dashed #2E6B3A"></span>氯離子×100 第1組</span>
+          <span><span class="lg-dot" style="background:#8FBF9A;border:1px dashed #8FBF9A"></span>氯離子×100 第2組</span>
+          <span><span class="lg-dot" style="background:#7A3800"></span>坍度cm 第1組</span>
+          <span><span class="lg-dot" style="background:#C99A6E"></span>坍度cm 第2組</span>
+          <span class="over-note"><i class="ti ti-alert-triangle" style="font-size:13px"></i>紅字＝超標</span>
+        </div>
+        <div class="sort-toggle">
+          <button class="sort-btn active" id="fc210-sort-unit" onclick="setSort('fc210','unit')"><i class="ti ti-layout-grid"></i>依單元</button>
+          <button class="sort-btn"        id="fc210-sort-date" onclick="setSort('fc210','date')"><i class="ti ti-calendar"></i>依日期</button>
+        </div>
+      </div>
+      <div class="scroll-wrap"><div class="scroll-inner" id="si-fc210"><canvas id="chart-fc210"></canvas></div></div>
+      <p class="scroll-hint"><i class="ti ti-hand-finger" style="font-size:13px"></i>左右滑動查看全部單元・淺色點為第2組試體</p>
     </div>
   </div>
 </section>
@@ -436,9 +461,9 @@ tbody tr:hover td{background:var(--surf2)}
     <table>
       <thead><tr>
         <th>日期</th><th>單元</th><th>類型</th><th>工項</th>
-        <th>澆置m³</th><th>比重</th><th>PH</th><th>黏滯s</th><th>含砂%</th><th>溫度</th><th>坍度</th><th>氯離子</th><th>試體</th><th>品質</th><th></th>
+        <th>澆置m³</th><th>比重</th><th>PH</th><th>黏滯s</th><th>含砂%</th><th>溫度</th><th>坍度</th><th>氯離子</th><th>強度</th><th>試體</th><th>品質</th><th></th>
       </tr></thead>
-      <tbody id="records-body"><tr><td colspan="14" class="no-data">尚無記錄，請先新增</td></tr></tbody>
+      <tbody id="records-body"><tr><td colspan="15" class="no-data">尚無記錄，請先新增</td></tr></tbody>
     </table>
   </div>
 </section>
@@ -501,7 +526,7 @@ function checkAlerts(r){
 
 // ── 資料 & 狀態 ──
 let records = [];
-const sortState = {sg:'unit', quality:'unit', concrete:'unit', 'conc-quality':'unit'};
+const sortState = {sg:'unit', quality:'unit', concrete:'unit', fc280:'unit', fc210:'unit'};
 const charts    = {};
 const TABS = ['input','dashboard','progress','table','alerts'];
 
@@ -844,54 +869,76 @@ function drawChart(id){
     });
   }
 
-  if(id==='conc-quality'){
-    const data=src.filter(r=>r.hasConcrete);
+  if(id==='fc280' || id==='fc210'){
+    const fcVal = id==='fc280' ? '280' : '210';
+    const data=src.filter(r=>r.hasConcrete && r.fc===fcVal);
     const W=Math.max(data.length*PER_UNIT,300);
-    const si=document.getElementById('si-conc-quality');
+    const si=document.getElementById('si-'+id);
     si.style.width=W+'px';
-    const cv=document.getElementById('chart-conc-quality');
+    const cv=document.getElementById('chart-'+id);
     cv.style.width=W+'px';cv.style.height='260px';cv.width=W;cv.height=260;
-    if(charts['conc-quality']){charts['conc-quality'].destroy();}
-    charts['conc-quality']=new Chart(cv,{
+    if(charts[id]){charts[id].destroy();}
+
+    if(!data.length){
+      const ctx=cv.getContext('2d');
+      ctx.clearRect(0,0,cv.width,cv.height);
+      ctx.font='13px sans-serif'; ctx.fillStyle='#A09D99'; ctx.textAlign='center';
+      ctx.fillText("尚無 fc'"+fcVal+" 規格的記錄", cv.width/2, cv.height/2);
+      return;
+    }
+
+    // 第二組顏色（較淺）
+    const COL2 = {temp:'#7FA8D9', chloride:'#8FBF9A', slump:'#C99A6E'};
+    const COL1 = {temp:'#1B4F8A', chloride:'#2E6B3A', slump:'#7A3800'};
+
+    function mkDS(field, labelBase, col1, col2, limKey, scale, fmt){
+      const ds1 = {
+        label:labelBase+' 第1組',
+        data:data.map(r=>r[field]!=null?(scale?+(r[field]*scale).toFixed(2):r[field]):null),
+        borderColor:col1,
+        pointBackgroundColor:data.map(r=>overColor(r[field],LIMITS[limKey].min,LIMITS[limKey].max,col1)),
+        pointBorderColor:data.map(r=>overColor(r[field],LIMITS[limKey].min,LIMITS[limKey].max,col1)),
+        pointRadius:4,pointStyle:'circle',tension:0.3,fill:false,
+        datalabels:{anchor:'end',align:'top',offset:2,
+          font:ctx=>({size:9,weight:isOver(limKey,data[ctx.dataIndex]?.[field])?'bold':'normal'}),
+          color:ctx=>overColor(data[ctx.dataIndex]?.[field],LIMITS[limKey].min,LIMITS[limKey].max,'#6B6964'),
+          formatter:(v,ctx)=>data[ctx.dataIndex]?.[field]!=null?fmt(data[ctx.dataIndex][field]):''}
+      };
+      const field2 = field+'2';
+      const hasAny2 = data.some(r=>r.specGroups===2 && r[field2]!=null);
+      const ds2 = hasAny2 ? {
+        label:labelBase+' 第2組',
+        data:data.map(r=>r.specGroups===2 && r[field2]!=null?(scale?+(r[field2]*scale).toFixed(2):r[field2]):null),
+        borderColor:col2,
+        pointBackgroundColor:data.map(r=>overColor(r[field2],LIMITS[limKey].min,LIMITS[limKey].max,col2)),
+        pointBorderColor:data.map(r=>overColor(r[field2],LIMITS[limKey].min,LIMITS[limKey].max,col2)),
+        pointRadius:4,pointStyle:'rectRot',tension:0.3,fill:false,spanGaps:false,
+        datalabels:{anchor:'start',align:'bottom',offset:2,
+          font:ctx=>({size:9,weight:isOver(limKey,data[ctx.dataIndex]?.[field2])?'bold':'normal'}),
+          color:ctx=>overColor(data[ctx.dataIndex]?.[field2],LIMITS[limKey].min,LIMITS[limKey].max,'#A09D99'),
+          formatter:(v,ctx)=>data[ctx.dataIndex]?.[field2]!=null?fmt(data[ctx.dataIndex][field2]):''}
+      } : null;
+      return ds2 ? [ds1,ds2] : [ds1];
+    }
+
+    const datasets = [
+      ...mkDS('temp','溫度',COL1.temp,COL2.temp,'temp',null,v=>v.toFixed(1)),
+      ...mkDS('chloride','氯離子×100',COL1.chloride,COL2.chloride,'chloride',100,v=>v.toFixed(3)),
+      ...mkDS('slump','坍度',COL1.slump,COL2.slump,'slump',null,v=>v.toFixed(1)),
+    ];
+
+    charts[id]=new Chart(cv,{
       type:'line',
-      data:{
-        labels:data.map(label),
-        datasets:[
-          {label:'溫度(°C)',data:data.map(r=>r.temp),
-           borderColor:'#1B4F8A',
-           pointBackgroundColor:data.map(r=>overColor(r.temp,10,32,'#1B4F8A')),
-           pointBorderColor:    data.map(r=>overColor(r.temp,10,32,'#1B4F8A')),
-           pointRadius:4,tension:0.3,fill:false,
-           datalabels:{anchor:'end',align:'top',offset:2,
-             font:ctx=>({size:9.5,weight:isOver('temp',ctx.dataset.data[ctx.dataIndex])?'bold':'normal'}),
-             color:ctx=>overColor(ctx.dataset.data[ctx.dataIndex],10,32,'#6B6964'),
-             formatter:v=>v!=null?v.toFixed(1):''}},
-          {label:'氯離子×100',data:data.map(r=>r.chloride!=null?+(r.chloride*100).toFixed(2):null),
-           borderColor:'#2E6B3A',borderDash:[5,3],
-           pointBackgroundColor:data.map(r=>overColor(r.chloride,0,0.15,'#2E6B3A')),
-           pointBorderColor:    data.map(r=>overColor(r.chloride,0,0.15,'#2E6B3A')),
-           pointRadius:4,tension:0.3,fill:false,
-           _origData:null,
-           datalabels:{anchor:'start',align:'bottom',offset:2,
-             font:ctx=>({size:9.5,weight:isOver('chloride',data[ctx.dataIndex]?.chloride)?'bold':'normal'}),
-             color:ctx=>overColor(data[ctx.dataIndex]?.chloride,0,0.15,'#6B6964'),
-             formatter:(v,ctx)=>data[ctx.dataIndex]?.chloride!=null?data[ctx.dataIndex].chloride.toFixed(3):''}},
-          {label:'坍度(cm)',data:data.map(r=>r.slump),
-           borderColor:'#7A3800',
-           pointBackgroundColor:data.map(r=>overColor(r.slump,18,22,'#7A3800')),
-           pointBorderColor:    data.map(r=>overColor(r.slump,18,22,'#7A3800')),
-           pointRadius:4,tension:0.3,fill:false,
-           datalabels:{anchor:'center',align:'right',offset:6,
-             font:ctx=>({size:9.5,weight:isOver('slump',ctx.dataset.data[ctx.dataIndex])?'bold':'normal'}),
-             color:ctx=>overColor(ctx.dataset.data[ctx.dataIndex],18,22,'#6B6964'),
-             formatter:v=>v!=null?v.toFixed(1):''}},
-        ]
-      },
+      data:{labels:data.map(label), datasets},
       options:{responsive:false,animation:false,layout:{padding:{top:26,bottom:24,left:8,right:8}},
         plugins:{legend:{display:false},datalabels:{},
           tooltip:{callbacks:{label:c=>{
-            if(c.datasetIndex===1) return '氯離子: '+(data[c.dataIndex]?.chloride!=null?data[c.dataIndex].chloride.toFixed(3):'—')+' kg/m³';
-            return c.dataset.label+': '+c.parsed.y;
+            const ds=c.dataset;
+            if(ds.label.includes('氯離子')){
+              const f = ds.label.includes('第2組')?'chloride2':'chloride';
+              return ds.label+': '+(data[c.dataIndex]?.[f]!=null?data[c.dataIndex][f].toFixed(3):'—')+' kg/m³';
+            }
+            return ds.label+': '+c.parsed.y;
           }}}},
         scales:{x:{ticks:{font:{size:10},maxRotation:mode==='date'?50:0}},y:{ticks:{font:{size:10}}}}
       }
@@ -977,7 +1024,7 @@ function makeEditableText(td, rowIdx, field, val){
 
 function renderTable(){
   const tbody=document.getElementById('records-body');
-  if(!records.length){tbody.innerHTML='<tr><td colspan="14" class="no-data">尚無記錄</td></tr>';return;}
+  if(!records.length){tbody.innerHTML='<tr><td colspan="15" class="no-data">尚無記錄</td></tr>';return;}
   const rev=[...records].map((r,i)=>({r,i})).reverse();
   tbody.innerHTML=rev.map(({r,i})=>{
     const issues=checkAlerts(r);
@@ -998,6 +1045,7 @@ function renderTable(){
       <td ${oc('temp',r.temp)} ${editHint} onclick="makeEditable(this,${i},'temp',${r.temp},1,1)">${r.temp!=null?r.temp:'—'}</td>
       <td ${oc('slump',r.slump)} ${editHint} onclick="makeEditable(this,${i},'slump',${r.slump},1,1)">${r.slump!=null?r.slump:'—'}</td>
       <td ${oc('chloride',r.chloride)} ${editHint} onclick="makeEditable(this,${i},'chloride',${r.chloride},3,3)">${r.chloride!=null?r.chloride.toFixed(3):'—'}</td>
+      <td>${r.hasConcrete && r.fc ? "fc'"+r.fc : '—'}</td>
       <td>${r.specGroups===2?'<span class="badge" style="background:var(--acc-l);color:var(--acc)">2組</span>':r.hasConcrete?'1組':'—'}</td>
       <td>${badge}</td>
       <td><button onclick="deleteRecord(${i})" style="background:none;border:none;cursor:pointer;color:var(--tx3);padding:2px 4px;font-size:16px"><i class="ti ti-trash"></i></button></td>
