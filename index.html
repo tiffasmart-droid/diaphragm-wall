@@ -871,7 +871,7 @@ function drawChart(id){
 
   if(id==='fc280' || id==='fc210'){
     const fcVal = id==='fc280' ? '280' : '210';
-    const data=src.filter(r=>r.hasConcrete && r.fc===fcVal);
+    const data=src.filter(r=>r.hasConcrete && String(r.fc)===fcVal);
     const W=Math.max(data.length*PER_UNIT,300);
     const si=document.getElementById('si-'+id);
     si.style.width=W+'px';
