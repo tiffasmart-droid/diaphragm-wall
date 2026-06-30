@@ -269,17 +269,49 @@ tbody tr:hover td{background:var(--surf2)}
         </div>
         <div class="work-toggle-body">
           <div class="form-grid-3">
-            <div class="field"><label>澆置量</label><input type="number" id="f-concrete" min="0" step="0.1" placeholder="0.0"><span class="hint">m³</span></div>
-            <div class="field"><label>溫度</label><input type="number" id="f-temp" min="0" max="60" step="0.1" placeholder="25" oninput="checkLimit(this,10,32)"><span class="hint">規範 10–32 °C</span></div>
-            <div class="field"><label>氯離子</label><input type="number" id="f-chloride" min="0" step="0.001" placeholder="0.1" oninput="checkLimit(this,0,0.15)"><span class="hint">規範 &lt;0.15 kg/m³</span></div>
-            <div class="field"><label>混凝土強度</label>
-              <select id="f-fc">
-                <option value="">— 請選擇 —</option>
-                <option value="280">連續壁 fc'280 kg/cm²</option>
-                <option value="210">扶壁／地中壁 fc'210 kg/cm²</option>
-              </select>
+            <div class="field"><label>澆置量</label><input type="number" id="f-concrete" min="0" step="0.1" placeholder="0.0" oninput="onConcreteInput()"><span class="hint">m³（超過100自動取兩組試體）</span></div>
+          </div>
+
+          <div class="field" style="margin-top:12px">
+            <label>試體組數</label>
+            <div style="display:flex;gap:8px;margin-top:4px">
+              <button type="button" class="sort-btn active" id="spec-grp-1" onclick="setSpecGroups(1)" style="padding:8px 16px;font-size:13px">1 組</button>
+              <button type="button" class="sort-btn" id="spec-grp-2" onclick="setSpecGroups(2)" style="padding:8px 16px;font-size:13px">2 組</button>
             </div>
-            <div class="field"><label>坍度</label><input type="number" id="f-slump" min="0" step="0.5" placeholder="20" oninput="checkLimit(this,18,22)"><span class="hint">規範 20±2 cm</span></div>
+          </div>
+
+          <div class="divider" style="margin:14px 0"></div>
+
+          <div id="spec-group-1">
+            <p style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:10px">第一組試體</p>
+            <div class="form-grid-3">
+              <div class="field"><label>溫度</label><input type="number" id="f-temp" min="0" max="60" step="0.1" placeholder="25" oninput="checkLimit(this,10,32)"><span class="hint">規範 10–32 °C</span></div>
+              <div class="field"><label>氯離子</label><input type="number" id="f-chloride" min="0" step="0.001" placeholder="0.1" oninput="checkLimit(this,0,0.15)"><span class="hint">規範 &lt;0.15 kg/m³</span></div>
+              <div class="field"><label>混凝土強度</label>
+                <select id="f-fc">
+                  <option value="">— 請選擇 —</option>
+                  <option value="280">連續壁 fc'280 kg/cm²</option>
+                  <option value="210">扶壁／地中壁 fc'210 kg/cm²</option>
+                </select>
+              </div>
+              <div class="field"><label>坍度</label><input type="number" id="f-slump" min="0" step="0.5" placeholder="20" oninput="checkLimit(this,18,22)"><span class="hint">規範 20±2 cm</span></div>
+            </div>
+          </div>
+
+          <div id="spec-group-2" style="display:none;margin-top:14px">
+            <p style="font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:10px">第二組試體</p>
+            <div class="form-grid-3">
+              <div class="field"><label>溫度</label><input type="number" id="f-temp2" min="0" max="60" step="0.1" placeholder="25" oninput="checkLimit(this,10,32)"><span class="hint">規範 10–32 °C</span></div>
+              <div class="field"><label>氯離子</label><input type="number" id="f-chloride2" min="0" step="0.001" placeholder="0.1" oninput="checkLimit(this,0,0.15)"><span class="hint">規範 &lt;0.15 kg/m³</span></div>
+              <div class="field"><label>混凝土強度</label>
+                <select id="f-fc2">
+                  <option value="">— 請選擇 —</option>
+                  <option value="280">連續壁 fc'280 kg/cm²</option>
+                  <option value="210">扶壁／地中壁 fc'210 kg/cm²</option>
+                </select>
+              </div>
+              <div class="field"><label>坍度</label><input type="number" id="f-slump2" min="0" step="0.5" placeholder="20" oninput="checkLimit(this,18,22)"><span class="hint">規範 20±2 cm</span></div>
+            </div>
           </div>
         </div>
       </div>
