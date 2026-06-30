@@ -665,8 +665,11 @@ async function saveRecord(){
     note:    document.getElementById('f-note').value.trim()
   };
   setLoading(true,'⏳ 儲存中…');
+  console.log('準備儲存的資料:', JSON.stringify(r, null, 2));
+  console.log('spec-grp-2 是否為active:', document.getElementById('spec-grp-2').classList.contains('active'));
   try{
-    await apiPost(r);
+    const apiResult = await apiPost(r);
+    console.log('API 回傳結果:', apiResult);
     await fetchRecords();
     const issues=checkAlerts(r);
     if(issues.length) showMsg('⚠ 已儲存，超標：'+issues.join('、'),'err');
