@@ -404,9 +404,9 @@ tbody tr:hover td{background:var(--surf2)}
     <table>
       <thead><tr>
         <th>日期</th><th>單元</th><th>類型</th><th>工項</th>
-        <th>澆置m³</th><th>比重</th><th>PH</th><th>黏滯s</th><th>含砂%</th><th>溫度</th><th>坍度</th><th>氯離子</th><th>品質</th><th></th>
+        <th>澆置m³</th><th>比重</th><th>PH</th><th>黏滯s</th><th>含砂%</th><th>溫度</th><th>坍度</th><th>氯離子</th><th>試體</th><th>品質</th><th></th>
       </tr></thead>
-      <tbody id="records-body"><tr><td colspan="13" class="no-data">尚無記錄，請先新增</td></tr></tbody>
+      <tbody id="records-body"><tr><td colspan="14" class="no-data">尚無記錄，請先新增</td></tr></tbody>
     </table>
   </div>
 </section>
@@ -553,6 +553,22 @@ function checkLimit(el,min,max){
   if(v<min||v>max) el.classList.add('err');
 }
 
+// ── 澆置量自動判斷試體組數 ──
+let specGroupsManual = false;
+function onConcreteInput(){
+  if(specGroupsManual) return; // 使用者手動選過就不再自動切換
+  const v = parseFloat(document.getElementById('f-concrete').value);
+  if(!isNaN(v) && v > 100) setSpecGroups(2, true);
+  else setSpecGroups(1, true);
+}
+function setSpecGroups(n, auto){
+  if(!auto) specGroupsManual = true; // 使用者手動點擊，鎖定不再自動切換
+  document.getElementById('spec-grp-1').classList.toggle('active', n===1);
+  document.getElementById('spec-grp-2').classList.toggle('active', n===2);
+  document.getElementById('spec-group-1').style.display = 'block';
+  document.getElementById('spec-group-2').style.display = n===2 ? 'block' : 'none';
+}
+
 // ── 警示計數 ──
 function updateAlertCount(){
   let n=0; records.forEach(r=>n+=checkAlerts(r).length);
@@ -584,6 +600,11 @@ async function saveRecord(){
     chloride:hasConcrete ?(parseFloat(document.getElementById('f-chloride').value)||null):null,
     fc:      hasConcrete ?document.getElementById('f-fc').value                          :'',
     slump:   hasConcrete ?(parseFloat(document.getElementById('f-slump').value)||null)   :null,
+    specGroups: hasConcrete ? (document.getElementById('spec-grp-2').classList.contains('active')?2:1) : 1,
+    temp2:    hasConcrete && document.getElementById('spec-grp-2').classList.contains('active') ?(parseFloat(document.getElementById('f-temp2').value)||null)     :null,
+    chloride2:hasConcrete && document.getElementById('spec-grp-2').classList.contains('active') ?(parseFloat(document.getElementById('f-chloride2').value)||null):null,
+    fc2:      hasConcrete && document.getElementById('spec-grp-2').classList.contains('active') ?document.getElementById('f-fc2').value                          :'',
+    slump2:   hasConcrete && document.getElementById('spec-grp-2').classList.contains('active') ?(parseFloat(document.getElementById('f-slump2').value)||null)   :null,
     note:    document.getElementById('f-note').value.trim()
   };
   setLoading(true,'⏳ 儲存中…');
@@ -607,12 +628,15 @@ function clearForm(){
   document.getElementById('f-panel').value='';
   document.getElementById('unit-tag-wrap').innerHTML='';
   document.getElementById('f-note').value='';
-  ['f-sg','f-ph','f-visc','f-sand','f-concrete','f-temp','f-chloride','f-slump'].forEach(id=>{
+  ['f-sg','f-ph','f-visc','f-sand','f-concrete','f-temp','f-chloride','f-slump','f-temp2','f-chloride2','f-slump2'].forEach(id=>{
     const el=document.getElementById(id);el.value='';el.classList.remove('err');
   });
   document.getElementById('f-fc').value='';
+  document.getElementById('f-fc2').value='';
   document.getElementById('f-date').value=new Date().toISOString().slice(0,10);
   document.getElementById('save-msg').style.display='none';
+  specGroupsManual = false;
+  setSpecGroups(1, true);
 }
 
 function resetForm(){
@@ -921,7 +945,7 @@ function makeEditableText(td, rowIdx, field, val){
 
 function renderTable(){
   const tbody=document.getElementById('records-body');
-  if(!records.length){tbody.innerHTML='<tr><td colspan="13" class="no-data">尚無記錄</td></tr>';return;}
+  if(!records.length){tbody.innerHTML='<tr><td colspan="14" class="no-data">尚無記錄</td></tr>';return;}
   const rev=[...records].map((r,i)=>({r,i})).reverse();
   tbody.innerHTML=rev.map(({r,i})=>{
     const issues=checkAlerts(r);
@@ -941,6 +965,8 @@ function renderTable(){
       <td ${oc('sand',r.sand)} ${editHint} onclick="makeEditable(this,${i},'sand',${r.sand},1,1)">${r.sand!=null?r.sand.toFixed(1):'—'}</td>
       <td ${oc('temp',r.temp)} ${editHint} onclick="makeEditable(this,${i},'temp',${r.temp},1,1)">${r.temp!=null?r.temp:'—'}</td>
       <td ${oc('slump',r.slump)} ${editHint} onclick="makeEditable(this,${i},'slump',${r.slump},1,1)">${r.slump!=null?r.slump:'—'}</td>
+      <td ${oc('chloride',r.chloride)} ${editHint} onclick="makeEditable(this,${i},'chloride',${r.chloride},3,3)">${r.chloride!=null?r.chloride.toFixed(3):'—'}</td>
+      <td>${r.specGroups===2?'<span class="badge" style="background:var(--acc-l);color:var(--acc)">2組</span>':r.hasConcrete?'1組':'—'}</td>
       <td>${badge}</td>
       <td><button onclick="deleteRecord(${i})" style="background:none;border:none;cursor:pointer;color:var(--tx3);padding:2px 4px;font-size:16px"><i class="ti ti-trash"></i></button></td>
     </tr>`;
